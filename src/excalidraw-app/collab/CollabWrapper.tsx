@@ -9,7 +9,7 @@ import {
   getElementMap,
   getSceneVersion,
 } from "../../packages/excalidraw/index";
-import { Collaborator, Gesture } from "../../types";
+import { Collaborator } from "../../types";
 import { resolvablePromise, withBatchedUpdates } from "../../utils";
 import {
   INITIAL_SCENE_UPDATE_TIMEOUT,
@@ -20,7 +20,7 @@ import {
   decryptAESGEM,
   generateCollaborationLinkData,
   getCollaborationLink,
-  SocketUpdateDataSource,
+  // SocketUpdateDataSource,
   SOCKET_SERVER,
 } from "../data";
 import {
@@ -57,7 +57,7 @@ export interface CollabAPI {
   isCollaborating: () => boolean;
   username: CollabState["username"];
   userState: CollabState["userState"];
-  onPointerUpdate: CollabInstance["onPointerUpdate"];
+  // onPointerUpdate: CollabInstance["onPointerUpdate"];
   initializeSocketClient: CollabInstance["initializeSocketClient"];
   onCollabButtonClick: CollabInstance["onCollabButtonClick"];
   broadcastElements: CollabInstance["broadcastElements"];
@@ -126,7 +126,7 @@ class CollabWrapper extends PureComponent<Props, CollabState> {
   componentWillUnmount() {
     window.removeEventListener(EVENT.BEFORE_UNLOAD, this.beforeUnload);
     window.removeEventListener(EVENT.UNLOAD, this.onUnload);
-    window.removeEventListener(EVENT.POINTER_MOVE, this.onPointerMove);
+    // window.removeEventListener(EVENT.POINTER_MOVE, this.onPointerMove);
     window.removeEventListener(
       EVENT.VISIBILITY_CHANGE,
       this.onVisibilityChange,
@@ -323,30 +323,30 @@ class CollabWrapper extends PureComponent<Props, CollabState> {
               this.reconcileElements(decryptedData.payload.elements),
             );
             break;
-          case "MOUSE_LOCATION": {
-            const {
-              pointer,
-              button,
-              username,
-              selectedElementIds,
-            } = decryptedData.payload;
-            const socketId: SocketUpdateDataSource["MOUSE_LOCATION"]["payload"]["socketId"] =
-              decryptedData.payload.socketId ||
-              // @ts-ignore legacy, see #2094 (#2097)
-              decryptedData.payload.socketID;
+          // case "MOUSE_LOCATION": {
+          //   const {
+          //     pointer,
+          //     button,
+          //     username,
+          //     selectedElementIds,
+          //   } = decryptedData.payload;
+          //   const socketId: SocketUpdateDataSource["MOUSE_LOCATION"]["payload"]["socketId"] =
+          //     decryptedData.payload.socketId ||
+          //     // @ts-ignore legacy, see #2094 (#2097)
+          //     decryptedData.payload.socketID;
 
-            const collaborators = new Map(this.collaborators);
-            const user = collaborators.get(socketId) || {}!;
-            user.pointer = pointer;
-            user.button = button;
-            user.selectedElementIds = selectedElementIds;
-            user.username = username;
-            collaborators.set(socketId, user);
-            this.excalidrawAPI.updateScene({
-              collaborators,
-            });
-            break;
-          }
+          //   const collaborators = new Map(this.collaborators);
+          //   const user = collaborators.get(socketId) || {}!;
+          //   user.pointer = pointer;
+          //   user.button = button;
+          //   user.selectedElementIds = selectedElementIds;
+          //   user.username = username;
+          //   collaborators.set(socketId, user);
+          //   this.excalidrawAPI.updateScene({
+          //     collaborators,
+          //   });
+          //   break;
+          // }
           case "IDLE_STATUS": {
             const { userState, socketId, username } = decryptedData.payload;
             const collaborators = new Map(this.collaborators);
@@ -462,19 +462,19 @@ class CollabWrapper extends PureComponent<Props, CollabState> {
     this.excalidrawAPI.history.clear();
   };
 
-  private onPointerMove = () => {
-    if (this.idleTimeoutId) {
-      window.clearTimeout(this.idleTimeoutId);
-      this.idleTimeoutId = null;
-    }
-    this.idleTimeoutId = window.setTimeout(this.reportIdle, IDLE_THRESHOLD);
-    if (!this.activeIntervalId) {
-      this.activeIntervalId = window.setInterval(
-        this.reportActive,
-        ACTIVE_THRESHOLD,
-      );
-    }
-  };
+  // private onPointerMove = () => {
+  //   if (this.idleTimeoutId) {
+  //     window.clearTimeout(this.idleTimeoutId);
+  //     this.idleTimeoutId = null;
+  //   }
+  //   this.idleTimeoutId = window.setTimeout(this.reportIdle, IDLE_THRESHOLD);
+  //   if (!this.activeIntervalId) {
+  //     this.activeIntervalId = window.setInterval(
+  //       this.reportActive,
+  //       ACTIVE_THRESHOLD,
+  //     );
+  //   }
+  // };
 
   private onVisibilityChange = () => {
     if (document.hidden) {
@@ -510,7 +510,7 @@ class CollabWrapper extends PureComponent<Props, CollabState> {
   };
 
   private initializeIdleDetector = () => {
-    document.addEventListener(EVENT.POINTER_MOVE, this.onPointerMove);
+    // document.addEventListener(EVENT.POINTER_MOVE, this.onPointerMove);
     document.addEventListener(EVENT.VISIBILITY_CHANGE, this.onVisibilityChange);
   };
 
@@ -543,15 +543,15 @@ class CollabWrapper extends PureComponent<Props, CollabState> {
     return this.excalidrawAPI.getSceneElementsIncludingDeleted();
   };
 
-  onPointerUpdate = (payload: {
-    pointer: SocketUpdateDataSource["MOUSE_LOCATION"]["payload"]["pointer"];
-    button: SocketUpdateDataSource["MOUSE_LOCATION"]["payload"]["button"];
-    pointersMap: Gesture["pointers"];
-  }) => {
-    payload.pointersMap.size < 2 &&
-      this.portal.socket &&
-      this.portal.broadcastMouseLocation(payload);
-  };
+  // onPointerUpdate = (payload: {
+  //   pointer: SocketUpdateDataSource["MOUSE_LOCATION"]["payload"]["pointer"];
+  //   button: SocketUpdateDataSource["MOUSE_LOCATION"]["payload"]["button"];
+  //   pointersMap: Gesture["pointers"];
+  // }) => {
+  //   payload.pointersMap.size < 2 &&
+  //     this.portal.socket &&
+  //     this.portal.broadcastMouseLocation(payload);
+  // };
 
   onIdleStateChange = (userState: UserIdleState) => {
     this.setState({ userState });
@@ -618,7 +618,7 @@ class CollabWrapper extends PureComponent<Props, CollabState> {
 
     this.contextValue.isCollaborating = () => this.isCollaborating;
     this.contextValue.username = this.state.username;
-    this.contextValue.onPointerUpdate = this.onPointerUpdate;
+    // this.contextValue.onPointerUpdate = this.onPointerUpdate;
     this.contextValue.initializeSocketClient = this.initializeSocketClient;
     this.contextValue.onCollabButtonClick = this.onCollabButtonClick;
     this.contextValue.broadcastElements = this.broadcastElements;
