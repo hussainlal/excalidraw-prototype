@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { ToolButton } from "./ToolButton";
 import { t } from "../i18n";
-import { file } from "./icons";
+import { file, share } from "./icons";
 
 import "./CollabButton.scss";
 
@@ -20,7 +20,7 @@ const PointerButton = ({
           "is-collaborating": isPointing,
         })}
         onClick={onClick}
-        icon={file}
+        icon={share}
         type="button"
         title={t("labels.liveCollaboration")}
         aria-label={t("labels.liveCollaboration")}
