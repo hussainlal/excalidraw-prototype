@@ -39,6 +39,7 @@ import { LoadingMessage } from "./LoadingMessage";
 import { LockButton } from "./LockButton";
 import { MobileMenu } from "./MobileMenu";
 import { PasteChartDialog } from "./PasteChartDialog";
+import PointerButton from "./PointerButton";
 import { Section } from "./Section";
 import { HelpDialog } from "./HelpDialog";
 import Stack from "./Stack";
@@ -57,6 +58,7 @@ interface LayerUIProps {
   setAppState: React.Component<any, AppState>["setState"];
   elements: readonly NonDeletedExcalidrawElement[];
   onCollabButtonClick?: () => void;
+  onPointerButtonClick?: () => void;
   onLockToggle: () => void;
   onInsertElements: (elements: readonly NonDeletedExcalidrawElement[]) => void;
   zenModeEnabled: boolean;
@@ -65,6 +67,7 @@ interface LayerUIProps {
   toggleZenMode: () => void;
   langCode: Language["code"];
   isCollaborating: boolean;
+  isPointing: boolean;
   renderTopRightUI?: (isMobile: boolean, appState: AppState) => JSX.Element;
   renderCustomFooter?: (isMobile: boolean, appState: AppState) => JSX.Element;
   viewModeEnabled: boolean;
@@ -366,6 +369,7 @@ const LayerUI = ({
   canvas,
   elements,
   onCollabButtonClick,
+  onPointerButtonClick,
   onLockToggle,
   onInsertElements,
   zenModeEnabled,
@@ -373,6 +377,7 @@ const LayerUI = ({
   showThemeBtn,
   toggleZenMode,
   isCollaborating,
+  isPointing,
   renderTopRightUI,
   renderCustomFooter,
   viewModeEnabled,
@@ -488,6 +493,13 @@ const LayerUI = ({
                 isCollaborating={isCollaborating}
                 collaboratorCount={appState.collaborators.size}
                 onClick={onCollabButtonClick}
+              />
+            )}
+            <Separator />
+            {onPointerButtonClick && (
+              <PointerButton
+                isPointing={isPointing}
+                onClick={onPointerButtonClick}
               />
             )}
           </Stack.Row>

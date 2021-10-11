@@ -387,6 +387,7 @@ class App extends React.Component<AppProps, AppState> {
 
     const {
       onCollabButtonClick,
+      onPointerButtonClick,
       renderTopRightUI,
       renderFooter,
       renderCustomStats,
@@ -416,6 +417,7 @@ class App extends React.Component<AppProps, AppState> {
               actionManager={this.actionManager}
               elements={this.scene.getElements()}
               onCollabButtonClick={onCollabButtonClick}
+              onPointerButtonClick={onPointerButtonClick}
               onLockToggle={this.toggleLock}
               onInsertElements={(elements) =>
                 this.addElementsFromPasteOrLibrary({
@@ -427,6 +429,7 @@ class App extends React.Component<AppProps, AppState> {
               toggleZenMode={this.toggleZenMode}
               langCode={getLanguage().code}
               isCollaborating={this.props.isCollaborating || false}
+              isPointing={this.props.isPointing || false}
               renderTopRightUI={renderTopRightUI}
               renderCustomFooter={renderFooter}
               viewModeEnabled={viewModeEnabled}

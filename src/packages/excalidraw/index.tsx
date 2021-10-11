@@ -17,6 +17,7 @@ const Excalidraw = (props: ExcalidrawProps) => {
     initialData,
     excalidrawRef,
     onCollabButtonClick,
+    onPointerButtonClick,
     isCollaborating,
     onPointerUpdate,
     renderTopRightUI,
@@ -76,6 +77,7 @@ const Excalidraw = (props: ExcalidrawProps) => {
         initialData={initialData}
         excalidrawRef={excalidrawRef}
         onCollabButtonClick={onCollabButtonClick}
+        onPointerButtonClick={onPointerButtonClick}
         isCollaborating={isCollaborating}
         onPointerUpdate={onPointerUpdate}
         renderTopRightUI={renderTopRightUI}
